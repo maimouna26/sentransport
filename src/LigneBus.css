@@ -1,0 +1,56 @@
+.ligne-bus {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  margin: 8px 0;
+  background-color: #ffffff;
+  border-radius: 8px;
+  border-left: 4px solid #0a6e31;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.ligne-bus {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  margin: 8px 0;
+  background-color: #ffffff;
+  border-radius: 8px;
+  border-left: 4px solid #0a6e31;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Effet au survol */
+.ligne-bus:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Style du numéro de ligne */
+.ligne-numero {
+  font-weight: bold;
+  font-size: 18px;
+  color: #0a6e31;
+  margin-right: 16px;
+}
+
+/* Infos de la ligne */
+.ligne-info {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Trajet */
+.ligne-trajet {
+  font-size: 14px;
+  color: #333;
+}
+
+/* Nombre d'arrêts */
+.ligne-arrets {
+  font-size: 12px;
+  color: #777;
+}
