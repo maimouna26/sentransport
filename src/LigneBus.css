@@ -10,18 +10,7 @@
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
 }
-.ligne-bus {
-  display: flex;
-  align-items: center;
-  padding: 12px 16px;
-  margin: 8px 0;
-  background-color: #ffffff;
-  border-radius: 8px;
-  border-left: 4px solid #0a6e31;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
+
 
 /* Effet au survol */
 .ligne-bus:hover {
@@ -31,9 +20,15 @@
 
 /* Style du numéro de ligne */
 .ligne-numero {
+  background-color: #0a6e31;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-weight: bold;
-  font-size: 18px;
-  color: #0a6e31;
   margin-right: 16px;
 }
 
@@ -53,4 +48,12 @@
 .ligne-arrets {
   font-size: 12px;
   color: #777;
+}
+.ligne-bus-active {
+  border-left: 4px solid #e67e22;
+  background-color: #fef9f3;
+}
+
+.ligne-bus-active .ligne-numero {
+  background-color: #e67e22;
 }
