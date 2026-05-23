@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';  // ← Etape 2 : ajout de useEffect
 import './App.css';
 import Header from './Header';
 import Recherche from './Recherche';
@@ -8,137 +8,31 @@ import StatReseau from './StatReseau';
 import DetailLigne from './DetailLignes';
 
 function App() {
+  // Etape 3 : remplacement du tableau en dur par les 3 etats
+  const [lignes, setLignes] = useState([]);
+  const [chargement, setChargement] = useState(true);
+  const [erreur, setErreur] = useState(null);
   const [recherche, setRecherche] = useState('');
   const [ligneSelectionnee, setLigneSelectionnee] = useState(null);
 
-const lignes = [
-  {
-    id: 1,
-    numero: "1",
-    depart: "Parcelles Assainies",
-    arrivee: "Plateau",
-    arrets: 14,
-    listeArrets: [
-      "Parcelles U14",
-      "Parcelles U10",
-      "Camberene",
-      "Patte d'Oie",
-      "Grand Dakar",
-      "Colobane",
-      "Ponty",
-      "Plateau"
-    ]
-  },
-  {
-    id: 2,
-    numero: "7",
-    depart: "Guediawaye",
-    arrivee: "Place Obe",
-    arrets: 18,
-    listeArrets: [
-      "Guediawaye",
-      "Pikine",
-      "Thiaroye",
-      "Keur Massar",
-      "Grand Yoff",
-      "Parcelles",
-      "Liberte 6",
-      "Place Obe"
-    ]
-  },
-  {
-    id: 3,
-    numero: "15",
-    depart: "Pikine",
-    arrivee: "Medina",
-    arrets: 12,
-    listeArrets: [
-      "Pikine Centre",
-      "Thiaroye Gare",
-      "Hann",
-      "Colobane",
-      "Fass",
-      "Medina"
-    ]
-  },
-  {
-    id: 4,
-    numero: "23",
-    depart: "Ouakam",
-    arrivee: "Grand Dakar",
-    arrets: 10,
-    listeArrets: [
-      "Ouakam Village",
-      "Mermoz",
-      "Fann",
-      "Point E",
-      "Liberte 5",
-      "Grand Dakar"
-    ]
-  },
-  {
-    id: 5,
-    numero: "8",
-    depart: "Almadies",
-    arrivee: "Colobane",
-    arrets: 16,
-    listeArrets: [
-      "Almadies",
-      "Ngor",
-      "Yoff",
-      "Ouest Foire",
-      "Liberte 6",
-      "Colobane"
-    ]
-  },
-  {
-    id: 6,
-    numero: "12",
-    depart: "Yoff",
-    arrivee: "Sandaga",
-    arrets: 11,
-    listeArrets: [
-      "Yoff Village",
-      "Aeroport LSS",
-      "Parcelles U17",
-      "Grand Yoff",
-      "HLM",
-      "Sandaga"
-    ]
-  }
-  ,
-    {
-      id: 7, numero: "31", depart: "Fann", arrivee: "HLM", arrets: 9, couleur: "#c0392b",
-      listeArrets: [
-        "Fann", "Point E", "Liberté 6", "Liberté 5",
-        "Liberté 3", "Liberté 1", "Grand Dakar", "HLM Marché", "HLM"
-      ]
-    },
-    {
-      id: 8, numero: "42", depart: "Liberté 6", arrivee: "Médina", arrets: 13, couleur: "#2980b9",
-      listeArrets: [
-        "Liberté 6", "Liberté 5", "Liberté 4", "Liberté 3", "Liberté 2",
-        "Liberté 1", "Médina Nord", "Médina Marché", "Tilène", "Grand Dakar",
-        "HLM", "Colobane", "Médina"
-      ]
-    },
-    {
-      id: 9, numero: "18", depart: "Dieuppeul", arrivee: "Sicap", arrets: 7, couleur: "#8e44ad",
-      listeArrets: [
-        "Dieuppeul", "Castors", "Liberté 6", "Sacré-Cœur",
-        "Mermoz", "Sicap Liberté", "Sicap"
-      ]
-    },
-    {
-      id: 10, numero: "27", depart: "HLM", arrivee: "Sandaga", arrets: 15, couleur: "#d35400",
-      listeArrets: [
-        "HLM", "HLM Marché", "Grand Dakar", "Tilène", "Médina",
-        "Liberté 1", "Liberté 2", "Liberté 3", "Liberté 4", "Liberté 5",
-        "Liberté 6", "Sacré-Cœur", "Colobane", "Kermel", "Sandaga"
-      ]
-    },
-  
-];
+  // Etape 3 : fetch au demarrage
+  useEffect(() => {
+    fetch("http://localhost:5000/lignes")
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Erreur serveur : " + response.status);
+        }
+        return response.json();
+      })
+      .then(data => {
+        setLignes(data);
+        setChargement(false);
+      })
+      .catch(error => {
+        setErreur(error.message);
+        setChargement(false);
+      });
+  }, []);
 
   const lignesFiltrees = lignes.filter((l) =>
     l.depart.toLowerCase().includes(recherche.toLowerCase()) ||
@@ -154,6 +48,37 @@ const lignes = [
     }
   }
 
+  // Etape 4 : ecran de chargement
+  if (chargement) {
+    return (
+      <div className="App">
+        <Header />
+        <main className="contenu">
+          <p className="message-chargement">
+            Chargement des lignes...
+          </p>
+        </main>
+      </div>
+    );
+  }
+
+  // Etape 4 : ecran d'erreur
+  if (erreur) {
+    return (
+      <div className="App">
+        <Header />
+        <main className="contenu">
+          <div className="message-erreur">
+            <p>Impossible de charger les lignes.</p>
+            <p className="erreur-detail">{erreur}</p>
+            <p>Verifiez que le serveur Flask est lance (python api/app.py).</p>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  // Ecran normal
   return (
     <div className="App">
       <Header />
